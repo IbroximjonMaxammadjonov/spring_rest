@@ -6,6 +6,8 @@ import com.ibroximjon.spring_rest.repository.TraineeRepository;
 import com.ibroximjon.spring_rest.repository.TrainerRepository;
 import com.ibroximjon.spring_rest.service.TraineeService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ import java.util.stream.Collectors;
 @Service
 public class TraineeServiceImpl implements TraineeService {
 
+    private static final Logger logger = LoggerFactory.getLogger(TraineeServiceImpl.class);
+
+
     @Autowired
     private TraineeRepository traineeRepository;
 
@@ -23,6 +28,9 @@ public class TraineeServiceImpl implements TraineeService {
 
     @Override
     public Trainee registerTrainee(Trainee trainee) {
+
+        logger.info("Registering new trainee with username: {}", trainee.getUsername());
+
         // Generate username and password
         String username = generateUsername(trainee.getFirstName(), trainee.getLastName());
         String password = generatePassword();
@@ -30,6 +38,9 @@ public class TraineeServiceImpl implements TraineeService {
         trainee.setUsername(username);
         trainee.setPassword(password);
         trainee.setActive(true);
+
+        logger.info("Trainee registered successfully with ID: {}", trainee.getId());
+
 
         return traineeRepository.save(trainee);
     }
